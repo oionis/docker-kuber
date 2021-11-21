@@ -1,0 +1,2 @@
+com/oionis/InfoControllerTest.java
+ com.oionis.InfoControllerTest

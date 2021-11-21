@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: info-service
+  labels:
+    app: info-service
+    project: docker-kubernetes
+spec:
+  selector:
+    app: info-service
+  ports:
+    - port: 8076
+      targetPort: 8076
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: info-service
+  labels:
+    app: info-service
+    project: docker-kubernetes
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: info-service
+  template:
+    metadata:
+      labels:
+        app: info-service
+        project: docker-kubernetes
+    spec:
+      containers:
+        - name: info-service
+          image: oionis/docker-kuber:0.6.5
+          ports:
+            - containerPort: 8076
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8076
+            initialDelaySeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8076
+            initialDelaySeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          imagePullPolicy: Always

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    app: postgres
+    project: docker-kubernetes
+data:
+  POSTGRES_URL: jdbc:postgresql://postgres:5432/
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+
